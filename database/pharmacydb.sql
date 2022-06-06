@@ -50,7 +50,7 @@ VALUES
         '0',
         'DAR ES SALAAM',
         1,
-        sha1('admin123')
+        'admin123'
     );
 
 CREATE TABLE medicines(
@@ -74,7 +74,8 @@ CREATE TABLE orders(
     phoneNumber VARCHAR(10) NOT NULL,
     user_id INT NOT NULL,
     paid_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE mpesa(

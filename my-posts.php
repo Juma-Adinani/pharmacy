@@ -69,10 +69,10 @@ if (!isset($_SESSION['id'])) {
         </div>
         <div class="header-left">
           <div class="input-group icons">
-            <div class="input-group-prepend">
+            <!-- <div class="input-group-prepend">
               <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
-            </div>
-            <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Dashboard" />
+            </div> -->
+            <!-- <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Dashboard" /> -->
             <div class="drop-down d-md-none">
               <form action="#">
                 <input type="text" class="form-control" placeholder="Search" />
@@ -257,7 +257,8 @@ if (!isset($_SESSION['id'])) {
             <ul aria-expanded="false">
               <li><a href="./view-medicine.php">Available Medicines</a></li>
               <li><a href="./post-medicine.php">Post Medicine</a></li>
-              <li><a href="./orders-made.php">Orders</a></li>
+              <li><a href="./orders-made.php">Orders made to me</a></li>
+              <li><a href="./orders-done.php">Orders made by me</a></li>
               <li><a href="./my-posts.php">Posts</a></li>
               <!-- <li><a href="./page-register.php">Register</a></li> -->
               <li><a href="./logout.php">Logout</a></li>
@@ -325,7 +326,7 @@ if (!isset($_SESSION['id'])) {
                         <th>Unit</th>
                         <th>Price (TZS (K)/unit)</th>
                         <th>Post date</th>
-                        <th class="text-center">Action</th>
+                        <!-- <th class="text-center">Action</th> -->
                       </tr>
                     </thead>
                     <tbody>
@@ -345,14 +346,14 @@ if (!isset($_SESSION['id'])) {
                               <td><?php echo $row['unit']; ?></td>
                               <td><?php echo $row['price']; ?></td>
                               <td><?php echo $row['post_date']; ?></td>
-                              <td class="text-center">
+                              <!-- <td class="text-center">
                                 <span>
                                   <a href="./edit-post.php" data-toggle="tooltip" data-placement="top" title="Edit">
                                     <i class="fa fa-pencil color-muted m-r-5 text-info"></i>
                                   </a>&nbsp;&nbsp;<a href="#" data-toggle="tooltip" data-placement="top" title="Delete">
                                     <i class="fa fa-trash text-danger"></i></a>
                                 </span>
-                              </td>
+                              </td> -->
                             </tr>
                       <?php
                           }
@@ -372,7 +373,7 @@ if (!isset($_SESSION['id'])) {
                         <th>Unit</th>
                         <th>Price (TZS (K)/unit)</th>
                         <th>Post date</th>
-                        <th class="text-center">Action</th>
+                        <!-- <th class="text-center">Action</th> -->
                       </tr>
                     </tfoot>
                   </table>

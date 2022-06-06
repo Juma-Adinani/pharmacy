@@ -67,127 +67,25 @@ if (!isset($_SESSION['id'])) {
             <span class="toggle-icon"><i class="icon-menu"></i></span>
           </div>
         </div>
-        <div class="header-left">
+        <div class="header-left w-50">
           <div class="input-group icons">
             <div class="input-group-prepend">
               <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
             </div>
-            <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Dashboard" />
+            <form action="" method="get" class="row w-75 d-flex justify-content-around">
+              <input type="search" class="form-control col-sm-8 form-control-sm" name="item" placeholder="Search item here..." aria-label="Search Dashboard" />
+              <button type="submit" name="search" class="btn btn-outline-success col-sm-3 btn-sm">search</button>
+            </form>
             <div class="drop-down d-md-none">
-              <form action="#">
+              <form action="">
                 <input type="text" class="form-control" placeholder="Search" />
+                <button type="submit" name="search" class="btn btn-outline-success">search</button>
               </form>
             </div>
           </div>
         </div>
         <div class="header-right">
           <ul class="clearfix">
-            <!-- <li class="icons dropdown">
-              <a href="javascript:void(0)" data-toggle="dropdown">
-                <i class="mdi mdi-email-outline"></i>
-                <span class="badge gradient-1 badge-pill badge-primary">3</span>
-              </a>
-              <div class="drop-down animated fadeIn dropdown-menu">
-                <div class="dropdown-content-heading d-flex justify-content-between">
-                  <span class="">3 New Messages</span>
-                </div>
-                <div class="dropdown-content-body">
-                  <ul>
-                    <li class="notification-unread">
-                      <a href="javascript:void()">
-                        <img class="float-left mr-3 avatar-img" src="images/avatar/1.jpg" alt="" />
-                        <div class="notification-content">
-                          <div class="notification-heading">Saiful Islam Pharmacy Limited</div>
-                          <div class="notification-timestamp">
-                            01 Hour ago
-                          </div>
-                          <div class="notification-text">
-                            Can we excahnge panadol for ezymotylcorticotrophin?..
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="notification-unread">
-                      <a href="javascript:void()">
-                        <img class="float-left mr-3 avatar-img" src="images/avatar/2.jpg" alt="" />
-                        <div class="notification-content">
-                          <div class="notification-heading">Shibayi Pharmacy Company</div>
-                          <div class="notification-timestamp">
-                            08 Hours ago
-                          </div>
-                          <div class="notification-text">
-                            Can you do me a favour for 3boxes of aspirin?
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="javascript:void()">
-                        <img class="float-left mr-3 avatar-img" src="images/avatar/3.jpg" alt="" />
-                        <div class="notification-content">
-                          <div class="notification-heading">Mlugaluga Pharmacy</div>
-                          <div class="notification-timestamp">
-                            08 Hours ago
-                          </div>
-                          <div class="notification-text">
-                            Hi Jay, can you send me ...
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </li>
-            <li class="icons dropdown">
-              <a href="javascript:void(0)" data-toggle="dropdown">
-                <i class="mdi mdi-bell-outline"></i>
-                <span class="badge badge-pill gradient-2 badge-primary">2</span>
-              </a>
-              <div class="drop-down animated fadeIn dropdown-menu dropdown-notfication">
-                <div class="dropdown-content-heading d-flex justify-content-between">
-                  <span class="">2 New Notifications</span>
-                </div>
-                <div class="dropdown-content-body">
-                  <ul>
-                    <li>
-                      <a href="javascript:void()">
-                        <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
-                        <div class="notification-content">
-                          <h6 class="notification-heading">
-                            New medicine shared
-                          </h6>
-                          <span class="notification-text">5 hours ago</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="javascript:void()">
-                        <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
-                        <div class="notification-content">
-                          <h6 class="notification-heading">New order made</h6>
-                          <span class="notification-text">1 day ago</span>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </li>
-            <li class="icons dropdown d-none d-md-flex">
-              <a href="javascript:void(0)" class="log-user" data-toggle="dropdown">
-                <span>English</span>
-                <i class="fa fa-angle-down f-s-14" aria-hidden="true"></i>
-              </a>
-              <div class="drop-down dropdown-language animated fadeIn dropdown-menu">
-                <div class="dropdown-content-body">
-                  <ul>
-                    <li><a href="javascript:void()">English</a></li>
-                    <li><a href="javascript:void()">Swahili</a></li>
-                  </ul>
-                </div>
-              </div>
-            </li> -->
             <li class="icons dropdown">
               <div class="user-img c-pointer position-relative" data-toggle="dropdown">
                 <span class="activity active"></span>
@@ -250,7 +148,8 @@ if (!isset($_SESSION['id'])) {
             <ul aria-expanded="false">
               <li><a href="./view-medicine.php">Available Medicines</a></li>
               <li><a href="./post-medicine.php">Post Medicine</a></li>
-              <li><a href="./orders-made.php">Orders</a></li>
+              <li><a href="./orders-made.php">Orders made to me</a></li>
+              <li><a href="./orders-done.php">Orders made by me</a></li>
               <li><a href="./my-posts.php">Posts</a></li>
               <!-- <li><a href="./page-register.php">Register</a></li> -->
               <li><a href="./logout.php">Logout</a></li>
@@ -310,13 +209,24 @@ if (!isset($_SESSION['id'])) {
             <div class="container mt-4">
               <div class="row">
                 <?php
-
-                $sql = "SELECT medicines.id as id, location, name,photo, quantity, price, unit, company, post_date
+                if (isset($_GET['search'])) {
+                  $name = mysqli_real_escape_string($con, $_GET['item']);
+                  $sql = "SELECT medicines.id as id, location, name,photo, quantity, price, unit, company, post_date
+                                        FROM medicines, users 
+                                        WHERE medicines.user_id = users.id 
+                                        AND quantity != 0 
+                                        AND name LIKE '%$name%'                                   
+                                        AND users.id != '" . $_SESSION['id'] . "'
+                                        ORDER BY post_date Desc";
+                  $result = mysqli_query($con, $sql);
+                } else {
+                  $sql = "SELECT medicines.id as id, location, name,photo, quantity, price, unit, company, post_date
                                         FROM medicines, users 
                                         WHERE medicines.user_id = users.id 
                                         AND quantity != 0 
                                         AND users.id != '" . $_SESSION['id'] . "'
                                         ORDER BY post_date Desc";
+                }
                 $result = mysqli_query($con, $sql);
 
                 if (!mysqli_error($con)) {

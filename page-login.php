@@ -47,9 +47,9 @@ if (isset($_SESSION['id'])) {
                 if (isset($_POST['login'])) {
                   $email = mysqli_real_escape_string($con, $_POST['email']);
                   $password = mysqli_real_escape_string($con, $_POST['password']);
-                  $hash = sha1($password);
+                  // $hash = sha1($password);
 
-                  $sql = $con->query("SELECT * FROM users WHERE email = '" . $email . "' AND password = '" . $hash . "'");
+                  $sql = $con->query("SELECT * FROM users WHERE email = '" . $email . "' AND password = '" . $password . "'");
 
                   if (!mysqli_error($con)) {
                     if (mysqli_num_rows($sql) == 1) {

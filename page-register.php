@@ -50,7 +50,7 @@ include_once './config/connect.php';
                   $email = mysqli_real_escape_string($con, $_POST['email']);
 
                   $sql = "INSERT INTO users (firstname, surname, company, email, phone, location, role_id, password)
-                        VALUES ('$firstname', '$surname', '$company', '$email', '$phone', '$location', 2, sha1('$password'))";
+                        VALUES ('$firstname', '$surname', '$company', '$email', '$phone', '$location', 2, '$password')";
                   $result = mysqli_query($con, $sql);
 
                   if (!mysqli_error($con)) {

@@ -70,10 +70,10 @@ if (!isset($_SESSION['id'])) {
         </div>
         <div class="header-left">
           <div class="input-group icons">
-            <div class="input-group-prepend">
+            <!-- <div class="input-group-prepend">
               <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
-            </div>
-            <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Dashboard" />
+            </div> -->
+            <!-- <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Dashboard" /> -->
             <div class="drop-down d-md-none">
               <form action="#">
                 <input type="text" class="form-control" placeholder="Search" />
@@ -258,7 +258,8 @@ if (!isset($_SESSION['id'])) {
             <ul aria-expanded="false">
               <li><a href="./view-medicine.php">Available Medicines</a></li>
               <li><a href="./post-medicine.php">Post Medicine</a></li>
-              <li><a href="./orders-made.php">Orders</a></li>
+              <li><a href="./orders-made.php">Orders made to me</a></li>
+              <li><a href="./orders-done.php">Orders made by me</a></li>
               <li><a href="./my-posts.php">Posts</a></li>
               <!-- <li><a href="./page-register.php">Register</a></li> -->
               <li><a href="./logout.php">Logout</a></li>
