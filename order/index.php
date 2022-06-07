@@ -109,7 +109,7 @@ $id = mysqli_real_escape_string($con, $_GET['id']);
         <div><span>Card</span></div>
       </div>
       <div class="media mt-4 pl-2 d-flex justify-content-center">
-        <img src="./images/1200px-M-PESA_LOGO-01.svg.png" class="" height="100" />
+        <img src="./images/1200px-M-PESA_LOGO-01.svg.png" class="" height="100"/>
       </div>
       <div class="media mt-3 pl-2">
         <!--bs5 input-->

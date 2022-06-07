@@ -235,10 +235,10 @@ if (!isset($_SESSION['id'])) {
                     while ($row = mysqli_fetch_assoc($result)) {
 
                 ?>
-                      <div class="col-6">
+                      <div class="col-4">
                         <div class="card border-primary">
                           <div class="card-header"><?php echo $row['location']; ?></div>
-                          <img src="./images/uploads/<?php echo $row['photo']; ?>" alt="" width="100%" height="220">
+                          <img src="./images/uploads/<?php echo $row['photo']; ?>" alt="" width="100%" height="200">
                           <div class="card-body">
                             <h5 class="card-title"><?php echo $row['name'] ?></h5>
                             <p class="card-text">

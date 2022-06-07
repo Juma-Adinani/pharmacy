@@ -239,13 +239,14 @@ if (!isset($_SESSION['id'])) {
                                                         <td>100</td>
                                                         <td><?php echo $row->paid_date; ?></td>
                                                         <td>YET...</td>
-                                                <?php
+                                            </tr>
+                                    <?php
                                                     }
                                                 } else {
                                                     echo '<tr><td colspan="9">No orders i made yet</td></tr>';
                                                 }
 
-                                                ?>
+                                    ?>
                                         </tbody>
                                         <tfoot>
                                             <tr>
