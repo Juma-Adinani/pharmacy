@@ -97,18 +97,7 @@ if (!isset($_SESSION['id'])) {
                     <li>
                       <a href="#"><i class="icon-user"></i> <span>Profile</span></a>
                     </li>
-                    <li>
-                      <a href="#"><i class="icon-envelope-open"></i> <span>Inbox</span>
-                        <div class="badge gradient-3 badge-pill badge-primary">
-                          3
-                        </div>
-                      </a>
-                    </li>
-
                     <hr class="my-2" />
-                    <li>
-                      <a href="#"><i class="icon-lock"></i> <span>Lock Screen</span></a>
-                    </li>
                     <li>
                       <a href="logout.php"><i class="icon-key"></i> <span>Logout</span></a>
                     </li>
@@ -147,36 +136,19 @@ if (!isset($_SESSION['id'])) {
             </a>
             <ul aria-expanded="false">
               <li><a href="./view-medicine.php">Available Medicines</a></li>
-              <li><a href="./post-medicine.php">Post Medicine</a></li>
-              <li><a href="./orders-made.php">Orders made to me</a></li>
-              <li><a href="./orders-done.php">Orders made by me</a></li>
-              <li><a href="./my-posts.php">Posts</a></li>
-              <!-- <li><a href="./page-register.php">Register</a></li> -->
+              <?php
+              if ($_SESSION['role'] != 'admin') {
+              ?>
+                <li><a href="./post-medicine.php">Post Medicine</a></li>
+                <li><a href="./orders-made.php">Orders made to me</a></li>
+                <li><a href="./orders-done.php">Orders made by me</a></li>
+                <li><a href="./my-posts.php">Posts</a></li>
+              <?php
+              }
+              ?>
               <li><a href="./logout.php">Logout</a></li>
             </ul>
           </li>
-          <!-- <li class="nav-label">Apps</li> -->
-          <li>
-            <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-              <i class="icon-bell menu-icon"></i>
-              <span class="nav-text">Notifications</span>
-            </a>
-            <ul aria-expanded="false">
-              <li><a href="#">Inbox</a></li>
-              <li><a href="#">Read</a></li>
-              <li><a href="#">Compose</a></li>
-            </ul>
-          </li>
-          <!-- <li>
-            <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-              <i class="icon-settings menu-icon"></i><span class="nav-text">Settings</span>
-            </a>
-            <ul aria-expanded="false">
-              <li><a href="#">Profile</a></li>
-              <li><a href="#">Date & Time</a></li>
-              <li><a href="#">Appearence</a></li>
-            </ul>
-          </li> -->
         </ul>
       </div>
     </div>
@@ -220,9 +192,11 @@ if (!isset($_SESSION['id'])) {
                                         ORDER BY post_date Desc";
                   $result = mysqli_query($con, $sql);
                 } else {
-                  $sql = "SELECT medicines.id as id, location, name,photo, quantity, price, unit, company, post_date
-                                        FROM medicines, users 
+                  $sql = "SELECT medicines.id as id, location_name, name,photo, quantity, price, unit, company, post_date
+                                        FROM medicines, users, location, units 
                                         WHERE medicines.user_id = users.id 
+                                        AND users.location_id = location.id
+                                        AND medicines.unit_id = units.id
                                         AND quantity != 0 
                                         AND users.id != '" . $_SESSION['id'] . "'
                                         ORDER BY post_date Desc";
@@ -237,7 +211,7 @@ if (!isset($_SESSION['id'])) {
                 ?>
                       <div class="col-4">
                         <div class="card border-primary">
-                          <div class="card-header"><?php echo $row['location']; ?></div>
+                          <div class="card-header"><?php echo $row['location_name']; ?></div>
                           <img src="./images/uploads/<?php echo $row['photo']; ?>" alt="" width="100%" height="200">
                           <div class="card-body">
                             <h5 class="card-title"><?php echo $row['name'] ?></h5>
@@ -245,10 +219,17 @@ if (!isset($_SESSION['id'])) {
                               Quantity: <?php echo $row['quantity'] ?>&nbsp;<?php echo $row['unit']; ?><br />
                               Price: <?php echo $row['price']; ?> TZS/<?php echo $row['unit']; ?>
                             </p>
-                            <a href="./order/index.php?id=<?php echo $row['id']; ?>" class="btn btn-outline-info">Order now</a>
+                            <?php
+                            if ($_SESSION['role'] != 'admin') {
+                            ?>
+                              <a href="./order/index.php?id=<?php echo $row['id']; ?>" class="btn btn-outline-info">Order now</a>
+                            <?php
+                            }
+                            ?>
                           </div>
                           <div class="card-footer">
-                            <small><?php echo $row['company']; ?></small><br />
+                            <a href="./pharm-details.php?id=<?php echo $row['id']; ?>"><small><?php echo $row['company']; ?></small>
+                            </a><br />
                             <small>Posted:&nbsp;<?php echo $row['post_date']; ?></small>
                           </div>
                         </div>

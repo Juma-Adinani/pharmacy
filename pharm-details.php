@@ -1,9 +1,17 @@
 <?php
+
 include_once './config/connect.php';
 session_start();
 if (!isset($_SESSION['id'])) {
     header('location: page-login.php');
 }
+
+if (!isset($_GET['id'])) {
+    header("location:./view-medicine.php");
+}
+
+$id = mysqli_real_escape_string($con, $_GET['id']);
+
 ?>
 
 <!DOCTYPE html>
@@ -12,12 +20,11 @@ if (!isset($_SESSION['id'])) {
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta Medicine name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>PharmaDonner | Smart and Easiest way to share human medicine.</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png" />
     <!-- Custom Stylesheet -->
-    <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet" />
 </head>
 
@@ -72,7 +79,7 @@ if (!isset($_SESSION['id'])) {
                     <div class="input-group icons">
                         <div class="drop-down d-md-none">
                             <form action="#">
-                                <input type="text" class="form-control" placeholder="Search" />
+                                <input required type="text" class="form-control" placeholder="Search" />
                             </form>
                         </div>
                     </div>
@@ -91,7 +98,6 @@ if (!isset($_SESSION['id'])) {
                                             <a href="#"><i class="icon-user"></i> <span>Profile</span></a>
                                         </li>
                                         <hr class="my-2" />
-
                                         <li>
                                             <a href="logout.php"><i class="icon-key"></i> <span>Logout</span></a>
                                         </li>
@@ -122,8 +128,6 @@ if (!isset($_SESSION['id'])) {
                             <li><a href="./index.php">HomePage</a></li>
                         </ul>
                     </li>
-
-                    <!-- <li class="nav-label">Pages</li> -->
                     <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
                             <i class="icon-notebook menu-icon"></i><span class="nav-text">Pages</span>
@@ -154,89 +158,69 @@ if (!isset($_SESSION['id'])) {
             Content body start
         ***********************************-->
         <div class="content-body">
+
             <div class="row page-titles mx-0">
                 <div class="col p-md-0">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="javascript:void(0)">Dashboard</a>
-                        </li>
-                        <li class="breadcrumb-item active">
-                            <a href="javascript:void(0)">Orders</a>
-                        </li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Posts</a></li>
                     </ol>
                 </div>
             </div>
             <!-- row -->
 
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-8">
                         <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title text-light">Orders Made</h4>
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered zero-configuration">
-                                        <thead>
-                                            <tr>
-                                                <th>Sn</th>
-                                                <th>Medicine name</th>
-                                                <th>Ordered to</th>
-                                                <th>Location</th>
-                                                <th>Phone number</th>
-                                                <th>Quantity</th>
-                                                <th>Total Price (TZS(K))</th>
-                                                <th>Order date</th>
-                                                <!-- <th class="text-center">Status</th> -->
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <?php
-                                                $sql = $con->query("SELECT name, company, location_name, phoneNumber, ordered_quantity, paid_date
-                                                 FROM orders, medicines, users, location 
-                                                 WHERE orders.medicine_id = medicines.id
-                                                 AND users.location_id = location.id
-                                                 AND medicines.user_id = users.id
-                                                 AND orders.user_id = '" . $_SESSION['id'] . "'");
-
-                                                if (mysqli_num_rows($sql) > 0) {
-                                                    $sn = 0;
-                                                    while ($row = mysqli_fetch_object($sql)) {
-                                                        $sn++;
-                                                ?>
-                                                        <td><?php echo $sn; ?></td>
-                                                        <td><?php echo $row->name; ?></td>
-                                                        <td><?php echo $row->company; ?></td>
-                                                        <td><?php echo $row->location; ?></td>
-                                                        <td><?php echo $row->phoneNumber; ?></td>
-                                                        <td><?php echo $row->ordered_quantity; ?></td>
-                                                        <td>100</td>
-                                                        <td><?php echo $row->paid_date; ?></td>
-                                                        <!-- <td>YET...</td> -->
-                                            </tr>
-                                    <?php
-                                                    }
-                                                } else {
-                                                    echo '<tr><td colspan="9" class="alert alert-info">No orders i made yet</td></tr>';
-                                                }
-
-                                    ?>
-                                        </tbody>
-                                        <!-- <tfoot>
-                                            <tr>
-                                                <th>Sn</th>
-                                                <th>Medicine name</th>
-                                                <th>Ordered by</th>
-                                                <th>Location</th>
-                                                <th>Phone number</th>
-                                                <th>Quantity</th>
-                                                <th>Total Price</th>
-                                                <th>Order date</th>
-                                                <th class="text-center">Status</th>
-                                            </tr>
-                                        </tfoot> -->
-                                    </table>
+                            <?php
+                            $sql = "SELECT company, email, phone, location_name, count(name) as total
+                                    FROM medicines, users, location 
+                                    WHERE medicines.user_id = users.id
+                                    AND users.location_id = location.id
+                                    AND users.id = $id";
+                            $result = mysqli_query($con, $sql);
+                            $row = mysqli_fetch_object($result);
+                            ?>
+                            <div class="card-header">
+                                <h3 class="h5 text-center"><?php echo $row->company; ?></h3>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span><strong>Email:</strong></span>
+                                    </div>
+                                    <div class="col-6">
+                                        <span><?php echo $row->email; ?></span>
+                                    </div>
                                 </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span><strong>Location:</strong></span>
+                                    </div>
+                                    <div class="col-6">
+                                        <span><?php echo $row->location_name; ?></span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span><strong>Phone number:</strong></span>
+                                    </div>
+                                    <div class="col-6">
+                                        <span><?php echo $row->phone; ?></span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span><strong>Medicine shared:</strong></span>
+                                    </div>
+                                    <div class="col-6">
+                                        <span><?php echo $row->total; ?></span>
+                                    </div>
+                                </div>
+                                <hr>
                             </div>
                         </div>
                     </div>
@@ -247,6 +231,7 @@ if (!isset($_SESSION['id'])) {
         <!--**********************************
             Content body end
         ***********************************-->
+
 
         <!--**********************************
             Footer start
@@ -277,9 +262,6 @@ if (!isset($_SESSION['id'])) {
     <script src="js/gleek.js"></script>
     <script src="js/styleSwitcher.js"></script>
 
-    <script src="./plugins/tables/js/jquery.dataTables.min.js"></script>
-    <script src="./plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
-    <script src="./plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
 </body>
 
 </html>

@@ -49,15 +49,19 @@ if (isset($_SESSION['id'])) {
                   $password = mysqli_real_escape_string($con, $_POST['password']);
                   // $hash = sha1($password);
 
-                  $sql = $con->query("SELECT * FROM users WHERE email = '" . $email . "' AND password = '" . $password . "'");
+                  $sql = $con->query("SELECT users.id as id, company, name
+                                      FROM users, roles
+                                      WHERE users.role_id = roles.id
+                                      AND email = '" . $email . "' 
+                                      AND password = '" . $password . "'");
 
                   if (!mysqli_error($con)) {
                     if (mysqli_num_rows($sql) == 1) {
-                      
-                      $row = mysqli_fetch_assoc($sql);
-                      $_SESSION['id'] = $row['id'];
-                      $_SESSION['company'] = $row['company'];
 
+                      $row = mysqli_fetch_assoc($sql);
+                      $_SESSION['company'] = $row['company'];
+                      $_SESSION['role'] = $row['name'];
+                      $_SESSION['id'] = $row['id'];
                       echo '<div class="alert alert-success text-center text-dark">Login successfully</div>';
                       header("Refresh:3; url=view-medicine.php");
                     } else {
@@ -68,7 +72,6 @@ if (isset($_SESSION['id'])) {
                   }
                 }
                 ?>
-
                 <a class="text-center" href="index.php">
                   <h4 class="text-info">PharmaDonner</h4>
                 </a>

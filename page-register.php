@@ -38,6 +38,7 @@ include_once './config/connect.php';
             <div class="card login-form mb-0">
 
               <div class="card-body pt-5">
+
                 <?php
                 if (isset($_POST['register'])) {
 
@@ -49,9 +50,14 @@ include_once './config/connect.php';
                   $password = mysqli_real_escape_string($con, $_POST['password']);
                   $email = mysqli_real_escape_string($con, $_POST['email']);
 
-                  $sql = "INSERT INTO users (firstname, surname, company, email, phone, location, role_id, password)
-                        VALUES ('$firstname', '$surname', '$company', '$email', '$phone', '$location', 2, '$password')";
+                  $sql = "INSERT INTO users (firstname, surname, company, email, phone, location_id, role_id, password)
+                          VALUES ('$firstname', '$surname', '$company', '$email', '$phone', '$location', 2, '$password')";
                   $result = mysqli_query($con, $sql);
+
+                  $user = mysqli_insert_id($con);
+
+                  $mpesa = $con->query("INSERT INTO mpesa (user_id, balance, pin) 
+                                        VALUES ($user, 10000000, " . rand(1, 10000) . ")");
 
                   if (!mysqli_error($con)) {
                     echo '<div class="alert alert-success text-center text-dark">Registered successfully</div>';
@@ -67,31 +73,42 @@ include_once './config/connect.php';
                 <form class="mt-5 mb-5 login-input" method="POST" action="">
                   <div class="form-group row">
                     <div class="col-6">
-                      <input required type="text" class="form-control" name="firstname" placeholder="firstname" />
+                      <input required type="text" class="form-control" name="firstname" placeholder="firstname" style="border-bottom: thin solid grey" />
                     </div>
 
                     <div class="col-6">
-                      <input required type="text" class="form-control" name="surname" placeholder="surname" />
+                      <input required type="text" class="form-control" name="surname" placeholder="surname" style="border-bottom: thin solid grey" />
                     </div>
                   </div>
                   <div class="form-group row">
                     <div class="col-6">
-                      <input required type="email" class="form-control" name="email" placeholder="email" />
+                      <input required type="email" class="form-control" name="email" placeholder="email" style="border-bottom: thin solid grey" />
                     </div>
 
                     <div class="col-6">
-                      <input required type="number" class="form-control" name="phone" placeholder="phone number" />
+                      <input required type="number" class="form-control" name="phone" placeholder="phone number" style="border-bottom: thin solid grey" />
                     </div>
                   </div>
                   <div class="form-group">
-                    <input required type="text" class="form-control" name="company" placeholder="pharmacy name" />
+                    <input required type="text" class="form-control" name="company" placeholder="pharmacy name" style="border-bottom: thin solid grey" />
                   </div>
                   <div class="form-group row">
                     <div class="col-6">
-                      <input required type="text" class="form-control" name="location" placeholder="Location" />
+                      <!-- <input required type="text" class="form-control" name="location" placeholder="Location" /> -->
+                      <select name="location" id="" class="form-control" style="border-bottom: thin solid grey">
+                        <option value="">choose location...</option>
+                        <?php
+                        $sql = $con->query("SELECT * FROM location");
+                        while ($row = mysqli_fetch_object($sql)) {
+                        ?>
+                          <option value="<?php echo $row->id; ?>"><?php echo $row->location_name; ?></option>
+                        <?php
+                        }
+                        ?>
+                      </select>
                     </div>
                     <div class="col-6">
-                      <input required type="password" class="form-control" name="password" placeholder="Password" />
+                      <input required type="password" class="form-control" name="password" placeholder="Password" style="border-bottom: thin solid grey" />
                     </div>
                   </div>
                   <button type="submit" name="register" class="btn login-form__btn submit w-100">
