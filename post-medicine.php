@@ -190,6 +190,7 @@ if (!isset($_SESSION['id'])) {
                 $quantity = mysqli_real_escape_string($con, $_POST['quantity']);
                 $price = mysqli_real_escape_string($con, $_POST['price']);
                 $unit = mysqli_real_escape_string($con, $_POST['unit']);
+                $expire = mysqli_real_escape_string($con, $_POST['expire']);
                 $user = $_SESSION['id'];
 
                 if (isset($_POST['post'])) {
@@ -202,8 +203,8 @@ if (!isset($_SESSION['id'])) {
                     //inserting data into a database
                     if (move_uploaded_file($tmpname, $filepath)) {
 
-                      $sql = "INSERT INTO medicines(name, quantity, unit_id, price, photo, user_id) 
-                        VALUES ('$medicine', '$quantity', '$unit', '$price', '$filename', '$user')";
+                      $sql = "INSERT INTO medicines(name, quantity, unit_id, price, expire_date, photo, user_id) 
+                        VALUES ('$medicine', '$quantity', '$unit', '$price', '$expire','$filename', '$user')";
                       $result = mysqli_query($con, $sql);
 
                       if (!mysqli_error($con)) {
@@ -249,6 +250,9 @@ if (!isset($_SESSION['id'])) {
                     </div>
                     <div class="form-group">
                       <input required type="number" class="form-control input-default" name="price" placeholder="Enter Price">
+                    </div>
+                    <div class="form-group">
+                      <input required type="date" class="form-control input-default" name="expire" placeholder="Enter Expire date">
                     </div>
                     <div class="form-group">
                       <input required type="file" class="form-control input-default" name="photo">

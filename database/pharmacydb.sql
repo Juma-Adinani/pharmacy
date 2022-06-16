@@ -91,6 +91,7 @@ CREATE TABLE medicines(
     unit_id INT NOT NULL,
     price INT NOT NULL,
     post_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    expire_date DATE,
     photo VARCHAR(300) NOT NULL,
     user_id INT NOT NULL,
     PRIMARY KEY(id),
