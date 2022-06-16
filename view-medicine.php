@@ -184,7 +184,7 @@ if (!isset($_SESSION['id'])) {
                 <?php
                 if (isset($_GET['search'])) {
                   $name = mysqli_real_escape_string($con, $_GET['item']);
-                  $sql = "SELECT medicines.id as id, location, expire_date, name,photo, quantity, price, unit, company, post_date
+                  $sql = "SELECT users.id as id, location, expire_date, name,photo, quantity, price, unit, company, post_date
                                         FROM medicines, users 
                                         WHERE medicines.user_id = users.id 
                                         AND quantity != 0 
@@ -193,7 +193,7 @@ if (!isset($_SESSION['id'])) {
                                         ORDER BY post_date Desc";
                   $result = mysqli_query($con, $sql);
                 } else {
-                  $sql = "SELECT medicines.id as id, location_name, expire_date, name,photo, quantity, price, unit, company, post_date
+                  $sql = "SELECT users.id as id, location_name, expire_date, name,photo, quantity, price, unit, company, post_date
                                         FROM medicines, users, location, units 
                                         WHERE medicines.user_id = users.id 
                                         AND users.location_id = location.id
