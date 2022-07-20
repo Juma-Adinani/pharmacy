@@ -22,7 +22,8 @@ if (isset($_SESSION['id'])) {
 <?php
 $message = "";
 if (isset($_POST['submit'])) {
-    $sql = $con->query("SELECT phone FROM users WHERE phone = '" . $_POST['phone'] . "'");
+    $phoneNumber = '255' . substr($_POST['phone'], 1);
+    $sql = $con->query("SELECT phone FROM users WHERE phone = '" . $phoneNumber . "'");
 
     if (mysqli_num_rows($sql) == 1) {
 

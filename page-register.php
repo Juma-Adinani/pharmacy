@@ -15,6 +15,7 @@ include_once './config/connect.php';
   <link href="css/style.css" rel="stylesheet" />
 </head>
 <?php
+$message = "";
 if (isset($_POST['register'])) {
 
   $firstname = mysqli_real_escape_string($con, $_POST['firstname']);
@@ -25,8 +26,9 @@ if (isset($_POST['register'])) {
   $password = mysqli_real_escape_string($con, $_POST['password']);
   $email = mysqli_real_escape_string($con, $_POST['email']);
 
+  $phoneNumber = '255' . substr($phone, 1);
   $sql = "INSERT INTO users (firstname, surname, company, email, phone, location_id, role_id, password)
-          VALUES ('$firstname', '$surname', '$company', '$email', '$phone', '$location', 2, '$password')";
+          VALUES ('$firstname', '$surname', '$company', '$email', '$phoneNumber', '$location', 2, '$password')";
   $result = mysqli_query($con, $sql);
 
   $user = mysqli_insert_id($con);
@@ -75,20 +77,20 @@ if (isset($_POST['register'])) {
                 <form class="mt-5 mb-5 login-input" method="POST" action="">
                   <div class="form-group row">
                     <div class="col-6">
-                      <input required type="text" class="form-control" name="firstname" placeholder="firstname" style="border-bottom: thin solid grey" />
+                      <input required type="text" class="form-control" name="firstname" placeholder="Firstname" style="border-bottom: thin solid grey" />
                     </div>
 
                     <div class="col-6">
-                      <input required type="text" class="form-control" name="surname" placeholder="surname" style="border-bottom: thin solid grey" />
+                      <input required type="text" class="form-control" name="surname" placeholder="Surname" style="border-bottom: thin solid grey" />
                     </div>
                   </div>
                   <div class="form-group row">
                     <div class="col-6">
-                      <input required type="email" class="form-control" name="email" placeholder="email" style="border-bottom: thin solid grey" />
+                      <input required type="email" class="form-control" name="email" placeholder="Email" style="border-bottom: thin solid grey" />
                     </div>
 
                     <div class="col-6">
-                      <input required type="number" class="form-control" name="phone" placeholder="phone number" style="border-bottom: thin solid grey" />
+                      <input required type="text" class="form-control" name="phone" placeholder="Phone number" style="border-bottom: thin solid grey" />
                     </div>
                   </div>
                   <div class="form-group">
@@ -110,7 +112,7 @@ if (isset($_POST['register'])) {
                       </select>
                     </div>
                     <div class="col-6">
-                      <input required type="password" class="form-control" name="password" id="validate" placeholder="Password" style="border-bottom: thin solid grey" pattern=".{8,}" title="required 8 minimum characters" />
+                      <input required type="password" class="form-control" name="password" id="validate" placeholder="Password" style="border-bottom: thin solid grey" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" />
                     </div>
                   </div>
                   <button type="submit" name="register" class="btn login-form__btn submit w-100">
