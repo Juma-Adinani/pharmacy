@@ -10664,7 +10664,11 @@ input[type="checkbox"]:checked:after {
   box-shadow: none;
   float: none;
   margin-left: 10px;
-  transition: background 0s ease-out 0s; }
+  transition: background 0s ease-out 0s;
+  border: thin solid #eee;
+  height:10px;
+  border-radius:100px
+}
 
 .dataTables_filter input:focus {
   background-size: 100% 2px, 100% 1px;

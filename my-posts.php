@@ -223,16 +223,16 @@ if (!isset($_SESSION['id'])) {
 
                       ?>
                     </tbody>
-                    <tfoot>
-                      <tr>
+                    <!-- <tfoot> -->
+                      <!-- <tr>
                         <th>Medicine name</th>
                         <th>Quantiy</th>
                         <th>Unit</th>
                         <th>Price (TZS (K)/unit)</th>
-                        <th>Post date</th>
+                        <th>Post date</th> -->
                         <!-- <th class="text-center">Action</th> -->
-                      </tr>
-                    </tfoot>
+                      <!-- </tr>
+                    </tfoot> -->
                   </table>
                 </div>
               </div>

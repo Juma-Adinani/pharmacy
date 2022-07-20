@@ -178,7 +178,8 @@ $id = mysqli_real_escape_string($con, $_GET['id']);
                                     FROM medicines, users, location 
                                     WHERE medicines.user_id = users.id
                                     AND users.location_id = location.id
-                                    AND users.id = $id";
+                                    AND users.id = $id
+                                    AND quantity != 0";
                             $result = mysqli_query($con, $sql);
                             $row = mysqli_fetch_object($result);
                             ?>

@@ -36,10 +36,13 @@ $id = mysqli_real_escape_string($con, $_GET['id']);
     <div class="card mt-5 px-3 py-4 w-50 shadow">
       <div class="text-secondary">
         <?php
-        $sql = " SELECT * FROM medicines WHERE id = $id";
+        $sql = " SELECT name, quantity, price, company, location_name, phone FROM medicines, users, location 
+                WHERE medicines.id = $id
+                AND medicines.user_id = users.id
+                AND users.location_id = location.id";
         $run = mysqli_query($con, $sql);
-
         $row = mysqli_fetch_object($run);
+
         echo '<div class="col-sm-12 d-flex justify-content-between">
           <span><strong>Medicine:</strong></span><span>' . $row->name . '</span>
         </div>
@@ -50,11 +53,13 @@ $id = mysqli_real_escape_string($con, $_GET['id']);
       </div>
       <hr>
       <?php
-      $sql = "SELECT pin, phone, balance FROM mpesa, users 
+      $sql = "SELECT pin, phone, balance, company, location_name FROM mpesa, users, location
               WHERE mpesa.user_id = users.id
+              AND users.location_id = location.id
               AND user_id = '" . $_SESSION['id'] . "'";
       $result = mysqli_query($con, $sql);
       $mpesa = mysqli_fetch_object($result);
+      // die(json_encode($mpesa));
 
       if (isset($_POST['submit'])) {
         $quantity = mysqli_real_escape_string($con, $_POST['quantity']);
@@ -88,9 +93,52 @@ $id = mysqli_real_escape_string($con, $_GET['id']);
             $insertQuery = $con->query("INSERT INTO orders (medicine_id, ordered_quantity, amount, phoneNumber, user_id) 
                                         VALUES ('$id', '" . $_SESSION['q'] . "', '" . $_SESSION['amount'] . "', '" . $mpesa->phone . "', '" . $_SESSION['id'] . "')");
             if (!mysqli_error($con)) {
+
+              //send sms to customer
+
+              $api_key = '7617b4296f066d58';
+              $secret_key = 'Nzc1MzA5ZTE2MjM2YTA4MzZiZjhiYWUzM2E5MTkwOGRlMmNmYjY1ZmNiYTQxN2FhZDljNTgxNDVhYzc3MWIyNQ==';
+
+              $postData = array(
+                'source_addr' => 'INFO',
+                'encoding' => 0,
+                'schedule_time' => '',
+                'message' => 'Confirmed at ' . date("d/M/Y, H:i:s") . 'Order made successfully, ' . $_SESSION['q'] . ' quantity of ' . $row->name . ' for total ' . $_SESSION['amount'] . 'Tsh
+from ' . $row->company . ' located at ' . $row->location_name . ' to ' . $mpesa->company . ' located at ' . $mpesa->location_name,
+                'recipients' => [array('recipient_id' => '1', 'dest_addr' => $mpesa->phone), array('recipient_id' => '2', 'dest_addr' => $row->phone)]
+              );
+
+              $Url = 'https://apisms.beem.africa/v1/send';
+
+              $ch = curl_init($Url);
+              error_reporting(E_ALL);
+              ini_set('display_errors', 1);
+              curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+              curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+              curl_setopt_array($ch, array(
+                CURLOPT_POST => TRUE,
+                CURLOPT_RETURNTRANSFER => TRUE,
+                CURLOPT_HTTPHEADER => array(
+                  'Authorization:Basic ' . base64_encode("$api_key:$secret_key"),
+                  'Content-Type: application/json'
+                ),
+                CURLOPT_POSTFIELDS => json_encode($postData)
+              ));
+
+              $response = curl_exec($ch);
+
+              if ($response === FALSE) {
+                echo $response;
+
+                die(curl_error($ch));
+              }
+              // var_dump($response);
               echo '<div class="alert alert-success text-center"><strong>...Order made successfully...</strong></div>';
+
               unset($_SESSION['amount']);
               unset($_SESSION['q']);
+              //end send sms to customer
+
               header("Refresh:3;url=../view-medicine.php");
             } else {
               echo '<div class="alert alert-danger">There is an error</div>' . mysqli_error($con);

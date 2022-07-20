@@ -19,6 +19,51 @@ if (!isset($_SESSION['id'])) {
   <!-- Custom Stylesheet -->
   <link href="css/style.css" rel="stylesheet" />
 </head>
+<?php
+$message = "";
+if (isset($_FILES['photo'])) {
+  $path = "./images/uploads/";
+  $filename = basename($_FILES['photo']['name']);
+  $filepath = $path . $filename;
+  $filetype = pathinfo($filepath, PATHINFO_EXTENSION);
+  $medicine = mysqli_real_escape_string($con, $_POST['name']);
+  $quantity = mysqli_real_escape_string($con, $_POST['quantity']);
+  $price = mysqli_real_escape_string($con, $_POST['price']);
+  $unit = mysqli_real_escape_string($con, $_POST['unit']);
+  $expire = mysqli_real_escape_string($con, $_POST['expire']);
+  $user = $_SESSION['id'];
+
+  if (isset($_POST['post'])) {
+    //checking the format of a file
+    $format = array('jpg', 'jpeg', 'png');
+    if (in_array($filetype, $format)) {
+
+      $tmpname = $_FILES['photo']['tmp_name'];
+
+      //inserting data into a database
+      if (move_uploaded_file($tmpname, $filepath)) {
+
+        $sql = "INSERT INTO medicines(name, quantity, unit_id, price, expire_date, photo, user_id) 
+          VALUES ('$medicine', '$quantity', '$unit', '$price', '$expire','$filename', '$user')";
+        $result = mysqli_query($con, $sql);
+
+        if (!mysqli_error($con)) {
+          $message .= '<div class="alert alert-success text-center text-dark">Posted successfully</div>';
+          header("Refresh:2;");
+        } else {
+          $message .= '<div class="alert alert-danger text-center text-dark">There is an error</div>' . mysqli_error($con);
+        }
+      } else {
+        $message .= '<center class="alert alert-danger">Error Occured on Posting..!</center>';
+      }
+    } else {
+      $message .= '<center class="alert alert-danger">Make Sure You post photo (jpg, png, jpeg) formats..!</center>';
+    }
+  } else {
+    $message .= "<div class='alert alert-warning'><strong>Select a file to upload!</strong></div>";
+  }
+}
+?>
 
 <body>
   <!--*******************
@@ -181,49 +226,7 @@ if (!isset($_SESSION['id'])) {
             <div class="card">
 
               <?php
-              if (isset($_FILES['photo'])) {
-                $path = "./images/uploads/";
-                $filename = basename($_FILES['photo']['name']);
-                $filepath = $path . $filename;
-                $filetype = pathinfo($filepath, PATHINFO_EXTENSION);
-                $medicine = mysqli_real_escape_string($con, $_POST['name']);
-                $quantity = mysqli_real_escape_string($con, $_POST['quantity']);
-                $price = mysqli_real_escape_string($con, $_POST['price']);
-                $unit = mysqli_real_escape_string($con, $_POST['unit']);
-                $expire = mysqli_real_escape_string($con, $_POST['expire']);
-                $user = $_SESSION['id'];
-
-                if (isset($_POST['post'])) {
-                  //checking the format of a file
-                  $format = array('jpg', 'jpeg', 'png');
-                  if (in_array($filetype, $format)) {
-
-                    $tmpname = $_FILES['photo']['tmp_name'];
-
-                    //inserting data into a database
-                    if (move_uploaded_file($tmpname, $filepath)) {
-
-                      $sql = "INSERT INTO medicines(name, quantity, unit_id, price, expire_date, photo, user_id) 
-                        VALUES ('$medicine', '$quantity', '$unit', '$price', '$expire','$filename', '$user')";
-                      $result = mysqli_query($con, $sql);
-
-                      if (!mysqli_error($con)) {
-                        echo '<div class="alert alert-success text-center text-dark">Posted successfully</div>';
-                        // header("Refresh:3;");
-
-                      } else {
-                        echo '<div class="alert alert-danger text-center text-dark">There is an error</div>' . mysqli_error($con);
-                      }
-                    } else {
-                      echo '<center class="alert alert-danger">Error Occured on Posting..!</center>';
-                    }
-                  } else {
-                    echo '<center class="alert alert-danger">Make Sure You post photo (jpg, png, jpeg) formats..!</center>';
-                  }
-                } else {
-                  echo "<div class='alert alert-warning'><strong>Select a file to upload!</strong></div>";
-                }
-              }
+              echo $message;
               ?>
               <div class="card-body">
                 <h4 class="card-title text-light">Post Medicine</h4>
@@ -249,10 +252,11 @@ if (!isset($_SESSION['id'])) {
                       </select>
                     </div>
                     <div class="form-group">
-                      <input required type="number" class="form-control input-default" name="price" placeholder="Enter Price">
+                      <input required type="number" class="form-control input-default" name="price" placeholder="Enter Price @ quantity">
                     </div>
                     <div class="form-group">
-                      <input required type="date" class="form-control input-default" name="expire" placeholder="Enter Expire date">
+                      <label for="date">Expire date</label>
+                      <input required type="date" class="form-control input-default" id="date" name="expire" placeholder="Enter Expire date">
                     </div>
                     <div class="form-group">
                       <input required type="file" class="form-control input-default" name="photo">

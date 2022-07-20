@@ -184,7 +184,7 @@ if (!isset($_SESSION['id'])) {
                 <?php
                 if (isset($_GET['search'])) {
                   $name = mysqli_real_escape_string($con, $_GET['item']);
-                  $sql = "SELECT users.id as id, location, expire_date, name,photo, quantity, price, unit, company, post_date
+                  $sql = "SELECT medicines.id as id, users.id as user, location, expire_date, name,photo, quantity, price, unit, company, post_date
                                         FROM medicines, users 
                                         WHERE medicines.user_id = users.id 
                                         AND quantity != 0 
@@ -193,7 +193,7 @@ if (!isset($_SESSION['id'])) {
                                         ORDER BY post_date Desc";
                   $result = mysqli_query($con, $sql);
                 } else {
-                  $sql = "SELECT users.id as id, location_name, expire_date, name,photo, quantity, price, unit, company, post_date
+                  $sql = "SELECT medicines.id as id, users.id as user, location_name, expire_date, name,photo, quantity, price, unit, company, post_date
                                         FROM medicines, users, location, units 
                                         WHERE medicines.user_id = users.id 
                                         AND users.location_id = location.id
@@ -230,9 +230,9 @@ if (!isset($_SESSION['id'])) {
                             ?>
                           </div>
                           <div class="card-footer">
-                            <a href="./pharm-details.php?id=<?php echo $row['id']; ?>"><small><?php echo $row['company']; ?></small>
-                            </a><br />
-                            <small>Posted:&nbsp;<?php echo $row['post_date']; ?></small>
+                           <small><?php echo $row['company']; ?></small><br>
+                            <small>Posted:&nbsp;<?php echo $row['post_date']; ?></small><br>
+                            <small> <a href="./pharm-details.php?id=<?php echo $row['user']; ?>" class="btn btn-sm btn-outline-secondary">View pharmacy details</a></small>
                           </div>
                         </div>
                       </div>
