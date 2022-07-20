@@ -86,11 +86,15 @@ if (isset($_SESSION['id'])) {
                   <button type="submit" name="login" class="btn login-form__btn submit w-100">
                     Sign In
                   </button>
-
                   <p class="mt-5 login-form__footer">
+                    Forgot password?
+                    <a href="forgot-password.php" class="text-primary">Click here</a>
+                  </p>
+                  <p class="mt-1 login-form__footer">
                     Dont have account?
                     <a href="page-register.php" class="text-primary">Sign Up</a>
                   </p>
+                </form>
               </div>
             </div>
           </div>

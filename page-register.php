@@ -14,6 +14,34 @@ include_once './config/connect.php';
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous" />
   <link href="css/style.css" rel="stylesheet" />
 </head>
+<?php
+if (isset($_POST['register'])) {
+
+  $firstname = mysqli_real_escape_string($con, $_POST['firstname']);
+  $surname = mysqli_real_escape_string($con, $_POST['surname']);
+  $company = mysqli_real_escape_string($con, $_POST['company']);
+  $location = mysqli_real_escape_string($con, $_POST['location']);
+  $phone = mysqli_real_escape_string($con, $_POST['phone']);
+  $password = mysqli_real_escape_string($con, $_POST['password']);
+  $email = mysqli_real_escape_string($con, $_POST['email']);
+
+  $sql = "INSERT INTO users (firstname, surname, company, email, phone, location_id, role_id, password)
+          VALUES ('$firstname', '$surname', '$company', '$email', '$phone', '$location', 2, '$password')";
+  $result = mysqli_query($con, $sql);
+
+  $user = mysqli_insert_id($con);
+
+  $mpesa = $con->query("INSERT INTO mpesa (user_id, balance, pin) 
+                        VALUES ($user, 10000000, " . rand(1, 10000) . ")");
+
+  if (!mysqli_error($con)) {
+    $message .= '<div class="alert alert-success text-center text-dark">Registered successfully</div>';
+    header("Refresh:3; url=page-login.php");
+  } else {
+    $message .= 'There is an error => ' . mysqli_error($con);
+  }
+}
+?>
 
 <body class="h-100">
   <!--*******************
@@ -38,34 +66,8 @@ include_once './config/connect.php';
             <div class="card login-form mb-0">
 
               <div class="card-body pt-5">
-
-                <?php
-                if (isset($_POST['register'])) {
-
-                  $firstname = mysqli_real_escape_string($con, $_POST['firstname']);
-                  $surname = mysqli_real_escape_string($con, $_POST['surname']);
-                  $company = mysqli_real_escape_string($con, $_POST['company']);
-                  $location = mysqli_real_escape_string($con, $_POST['location']);
-                  $phone = mysqli_real_escape_string($con, $_POST['phone']);
-                  $password = mysqli_real_escape_string($con, $_POST['password']);
-                  $email = mysqli_real_escape_string($con, $_POST['email']);
-
-                  $sql = "INSERT INTO users (firstname, surname, company, email, phone, location_id, role_id, password)
-                          VALUES ('$firstname', '$surname', '$company', '$email', '$phone', '$location', 2, '$password')";
-                  $result = mysqli_query($con, $sql);
-
-                  $user = mysqli_insert_id($con);
-
-                  $mpesa = $con->query("INSERT INTO mpesa (user_id, balance, pin) 
-                                        VALUES ($user, 10000000, " . rand(1, 10000) . ")");
-
-                  if (!mysqli_error($con)) {
-                    echo '<div class="alert alert-success text-center text-dark">Registered successfully</div>';
-                    header("Refresh:3; url=page-login.php");
-                  } else {
-                    echo 'There is an error => ' . mysqli_error($con);
-                  }
-                }
+                <?=
+                $message;
                 ?>
                 <a class="text-center" href="index.php">
                   <h4 class="text-info">PharmaDonner</h4>
@@ -108,7 +110,7 @@ include_once './config/connect.php';
                       </select>
                     </div>
                     <div class="col-6">
-                      <input required type="password" class="form-control" name="password" placeholder="Password" style="border-bottom: thin solid grey" />
+                      <input required type="password" class="form-control" name="password" id="validate" placeholder="Password" style="border-bottom: thin solid grey" pattern=".{8,}" title="required 8 minimum characters" />
                     </div>
                   </div>
                   <button type="submit" name="register" class="btn login-form__btn submit w-100">
@@ -136,6 +138,26 @@ include_once './config/connect.php';
   <script src="js/settings.js"></script>
   <script src="js/gleek.js"></script>
   <script src="js/styleSwitcher.js"></script>
+  <!-- <script>
+    function validatePassword() {
+      var p = document.getElementById('validate').value,
+        errors = [];
+      if (p.length < 8) {
+        errors.push("Your password must be at least 8 characters");
+      }
+      if (p.search(/[a-z]/i) < 0) {
+        errors.push("Your password must contain at least one letter.");
+      }
+      if (p.search(/[0-9]/) < 0) {
+        errors.push("Your password must contain at least one digit.");
+      }
+      if (errors.length > 0) {
+        alert(errors.join("\n"));
+        return false;
+      }
+      return true;
+    }
+  </script> -->
 </body>
 
 </html>
